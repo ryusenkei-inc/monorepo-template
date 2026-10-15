@@ -15,8 +15,9 @@ Code shared across repositories lives in [toolkit](https://github.com/ryusenkei-
 ## Commands
 
 ```sh
-pnpm lint                      # type check and prose-lint
+pnpm lint                      # type check, prose-lint, and shared-file check
 pnpm lint:prose [paths...]     # prose-lint only (code comments and tracked Markdown)
+npx ryusenkei-conventions sync # write the shared files from @ryusenkei/conventions
 pnpm lint:prose --fix          # fix spacing and trailing-comment alignment in code comments
 pnpm test                      # tests
 node scripts/env.ts run <cmd>  # run a command with .env loaded
@@ -32,11 +33,12 @@ pnpm repo:settings             # apply GitHub repository settings (squash merge 
 
 | File | Purpose |
 | --- | --- |
+| [`@ryusenkei/conventions`](https://www.npmjs.com/package/@ryusenkei/conventions) | Shared rules imported by `CLAUDE.md`, Claude Code hooks that enforce the conventions, and master copies of the files below (except `ci.yaml`). Run `npx ryusenkei-conventions sync` after an update |
 | `mise.toml` | Node.js and Terraform versions (pnpm is pinned by `packageManager` in `package.json`) |
 | `.github/workflows/ci.yaml` | Typecheck, Test, Prose lint, and Secret scan on pushes to `main` and on pull requests. On pull requests, also checks the PR title, which becomes the squash commit message |
 | `.github/dependabot.yaml` | Weekly update PRs for npm and GitHub Actions (minor and patch grouped) |
 | `.gitleaks.toml` | Secret scan settings |
-| `.claude/settings.json` | Claude Code hook that runs `prose-lint --hook` on each edited file and returns issues and examples to the agent |
+| `.claude/settings.json` | Claude Code hooks (`@ryusenkei/conventions` and `prose-lint --hook`), `attribution`, and `permissions.deny` |
 | `.editorconfig`, `.gitattributes` | Encoding, indentation, and LF line endings |
 
 ## Creating a repository from this template
