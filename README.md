@@ -35,7 +35,8 @@ pnpm repo:settings             # apply GitHub repository settings (squash merge 
 | --- | --- |
 | [`@ryusenkei/conventions`](https://www.npmjs.com/package/@ryusenkei/conventions) | Shared rules imported by `CLAUDE.md`, Claude Code hooks that enforce the conventions, and master copies of the files below (except `ci.yaml`). Run `npx ryusenkei-conventions sync` after an update |
 | `mise.toml` | Node.js and Terraform versions (pnpm is pinned by `packageManager` in `package.json`) |
-| `.github/workflows/ci.yaml` | Typecheck, Test, Prose lint, and Secret scan on pushes to `main` and on pull requests. On pull requests, also checks the PR title, which becomes the squash commit message |
+| `.github/workflows/ci.yaml` | Typecheck, Test, Prose lint, PR title, and Secret scan on pull requests to `main` only (no run on pushes to `main`, to save Actions minutes on private repositories). The PR title becomes the squash commit message |
+| `.github/workflows/pr-title.yaml` | Re-checks only the PR title when it is edited, without installing dependencies |
 | `.github/dependabot.yaml` | Monthly update PRs for npm and GitHub Actions (minor and patch grouped, no automatic rebase). `gomod` and `cargo` entries are added when `go.mod` or `Cargo.toml` exists at the root |
 | `.gitleaks.toml` | Secret scan settings |
 | `.claude/settings.json` | Claude Code hooks (`@ryusenkei/conventions` and `prose-lint --hook`), `attribution`, and `permissions.deny` |
