@@ -1,15 +1,16 @@
-# push・PR ごとの検査。1 ジョブで手順に名前を付け、失敗した検査を画面で識別
+# main 行きの PR の検査。1 ジョブで手順に名前を付け、失敗した検査を画面で識別
+#   非公開のリポの Actions の時間（GitHub Free は組織の合計で月 2,000 分、ジョブごとに分単位の切り上げ）を節約
+#   main への push: 実行なし（main 行きの PR がマージの結果の ref で検査済み）
+#   PR のタイトルの変更: pr-title.yaml（タイトルの検査だけ、依存の導入なし）
 name: CI
 
-# main への push と PR だけ
 on:
-  push:
-    branches: [main]
   pull_request:
-    # `edited` = PR のタイトルの変更でも再検査
-    types: [opened, synchronize, reopened, edited]
+    branches: [main]
+    # タイトルの変更（edited）は pr-title.yaml: 同じワークフローの後の実行がジョブ ci を「スキップ」で上書きし、失敗を隠すため
+    types: [opened, synchronize, reopened]
 
-# 同じ ref の新しい実行が来たら古い実行を中止
+# 同じ PR の新しい実行が来たら古い実行を中止
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -39,7 +40,7 @@ jobs:
       #   タイトルは環境変数で受け渡し（式の展開によるコマンドの注入を防止）
       #   Dependabot の PR は英語の定型のタイトル → 対象外
       - name: PR title
-        if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]'
+        if: github.event.pull_request.user.login != 'dependabot[bot]'
         env:
           TITLE: ${{ github.event.pull_request.title }}
         run: |
