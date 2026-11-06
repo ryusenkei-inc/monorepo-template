@@ -8,3 +8,4 @@
 - 共通の規約: 下の import（`pnpm install` の実行後に有効）
 
 @node_modules/@ryusenkei/conventions/rules.md
+@node_modules/@ryusenkei/conventions/rules-ts.md

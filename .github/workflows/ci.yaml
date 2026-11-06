@@ -1,13 +1,10 @@
-# main 行きの PR の検査。1 ジョブで手順に名前を付け、失敗した検査を画面で識別
-#   非公開のリポの Actions の時間（GitHub Free は組織の合計で月 2,000 分、ジョブごとに分単位の切り上げ）を節約
-#   main への push: 実行なし（main 行きの PR がマージの結果の ref で検査済み）
-#   PR のタイトルの変更: pr-title.yaml（タイトルの検査だけ、依存の導入なし）
+# main 行きの PR の検査。中身は toolkit の再利用可能なワークフロー（main への push では実行しない）
 name: CI
 
 on:
   pull_request:
     branches: [main]
-    # タイトルの変更（edited）は pr-title.yaml: 同じワークフローの後の実行がジョブ ci を「スキップ」で上書きし、失敗を隠すため
+    # タイトルの変更（edited）は pr-title.yaml
     types: [opened, synchronize, reopened]
 
 # 同じ PR の新しい実行が来たら古い実行を中止
@@ -20,32 +17,4 @@ permissions:
 
 jobs:
   ci:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0 # 秘密値の検査は全履歴が対象
-      # Node・Terraform = mise.toml
-      - uses: jdx/mise-action@v4
-      - uses: pnpm/action-setup@v6
-      - name: Install
-        run: pnpm install --frozen-lockfile
-      - name: Typecheck
-        run: pnpm typecheck
-      - name: Test
-        run: pnpm test
-      - name: Prose lint
-        run: pnpm lint:prose
-      # squash merge → main のコミットのメッセージ = PR のタイトル（手元の commit-msg フックの対象外）
-      #   タイトルは環境変数で受け渡し（式の展開によるコマンドの注入を防止）
-      #   Dependabot の PR は英語の定型のタイトル → 対象外
-      - name: PR title
-        if: github.event.pull_request.user.login != 'dependabot[bot]'
-        env:
-          TITLE: ${{ github.event.pull_request.title }}
-        run: |
-          printf '%s\n' "$TITLE" > "$RUNNER_TEMP/title"
-          pnpm exec prose-lint --commit-msg "$RUNNER_TEMP/title"
-      # gitleaks-action は組織での利用に有料ライセンスが必要 → CLI の公式イメージを直接実行
-      - name: Secret scan
-        run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.30.1 git /repo --config /repo/.gitleaks.toml --redact --verbose
+    uses: ryusenkei-inc/toolkit/.github/workflows/reusable-ci.yaml@main
