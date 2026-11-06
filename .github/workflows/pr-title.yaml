@@ -1,5 +1,4 @@
-# main 行きの PR のタイトルの変更の再検査（タイトルの検査だけ、依存の導入・履歴の取得を省略）
-#   ci.yaml と別のワークフローの理由: 同じワークフローの後の実行がジョブ ci の結果を「スキップ」で上書きし、失敗を隠すため
+# main 行きの PR のタイトルの変更の再検査。中身は toolkit の再利用可能なワークフロー
 name: PR title
 
 on:
@@ -16,18 +15,4 @@ permissions:
 
 jobs:
   title:
-    if: github.event.pull_request.user.login != 'dependabot[bot]'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      # Node = mise.toml
-      - uses: jdx/mise-action@v4
-      # squash merge → main のコミットのメッセージ = PR のタイトル（手元の commit-msg フックの対象外）
-      #   タイトルは環境変数で受け渡し（式の展開によるコマンドの注入を防止）
-      #   npx: prose-lint だけを取得（依存の導入を省略）、版は package.json の指定に追従
-      - name: PR title
-        env:
-          TITLE: ${{ github.event.pull_request.title }}
-        run: |
-          printf '%s\n' "$TITLE" > "$RUNNER_TEMP/title"
-          npx --yes "@ryusenkei/prose-lint@$(node -p "require('./package.json').devDependencies['@ryusenkei/prose-lint']")" --commit-msg "$RUNNER_TEMP/title"
+    uses: ryusenkei-inc/toolkit/.github/workflows/reusable-pr-title.yaml@main
