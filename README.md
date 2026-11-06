@@ -26,7 +26,7 @@ pnpm repo:settings             # apply GitHub repository settings (squash merge 
 ```
 
 - Style rules and settings: [`@ryusenkei/prose-lint`](https://www.npmjs.com/package/@ryusenkei/prose-lint). Add `prose-lint.json` to the root only to change the defaults.
-- Commit messages are checked by `.githooks/commit-msg`, enabled by `prepare` on `pnpm install`.
+- Commit messages are checked by `.githooks/commit-msg`, and `.githooks/pre-push` runs the `check` script if one is defined. Both are enabled by `prepare` on `pnpm install`.
 - `env:push` targets are defined in `TARGETS` in `scripts/env.ts`.
 
 ## Tooling
@@ -36,7 +36,7 @@ pnpm repo:settings             # apply GitHub repository settings (squash merge 
 | [`@ryusenkei/conventions`](https://www.npmjs.com/package/@ryusenkei/conventions) | Shared rules imported by `CLAUDE.md`, Claude Code hooks that enforce the conventions, and master copies of the files below (except `ci.yaml`). Run `npx ryusenkei-conventions sync` after an update |
 | `mise.toml` | Node.js and Terraform versions (pnpm is pinned by `packageManager` in `package.json`) |
 | `.github/workflows/ci.yaml` | Typecheck, Test, Prose lint, and Secret scan on pushes to `main` and on pull requests. On pull requests, also checks the PR title, which becomes the squash commit message |
-| `.github/dependabot.yaml` | Weekly update PRs for npm and GitHub Actions (minor and patch grouped) |
+| `.github/dependabot.yaml` | Monthly update PRs for npm and GitHub Actions (minor and patch grouped, no automatic rebase). `gomod` and `cargo` entries are added when `go.mod` or `Cargo.toml` exists at the root |
 | `.gitleaks.toml` | Secret scan settings |
 | `.claude/settings.json` | Claude Code hooks (`@ryusenkei/conventions` and `prose-lint --hook`), `attribution`, and `permissions.deny` |
 | `.editorconfig`, `.gitattributes` | Encoding, indentation, and LF line endings |
