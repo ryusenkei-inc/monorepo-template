@@ -8,6 +8,7 @@
   },
   "scripts": {
     "lint": "pnpm typecheck && prose-lint && ryusenkei-conventions check",
+    "check": "pnpm lint && pnpm test",
     "lint:prose": "prose-lint",
     "typecheck": "pnpm -r --if-present typecheck && tsc",
     "test": "vitest run --passWithNoTests",
@@ -16,9 +17,9 @@
     "prepare": "git config core.hooksPath .githooks"
   },
   "devDependencies": {
-    "@ryusenkei/conventions": "^0.8.1",
+    "@ryusenkei/conventions": "^0.8.2",
     "@ryusenkei/prose-lint": "^0.2.0",
-    "@ryusenkei/scripts": "^0.1.0",
+    "@ryusenkei/scripts": "^0.2.1",
     "@types/node": "^26.6.1",
     "typescript": "^5.9.3",
     "vitest": "^5.0.1"
