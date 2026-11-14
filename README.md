@@ -34,6 +34,7 @@ pnpm repo:settings             # apply GitHub repository settings (ryusenkei-rep
 | File | Purpose |
 | --- | --- |
 | [`@ryusenkei/conventions`](https://www.npmjs.com/package/@ryusenkei/conventions) | Shared rules imported by `CLAUDE.md`, Claude Code hooks that enforce the conventions, and master copies of the files below (except the workflows). Run `npx ryusenkei-conventions sync` after an update |
+| `vitest.config.ts` | Adds `TEST_EXCLUDE` from `@ryusenkei/conventions` to Vitest's default `exclude` (`ryusenkei-conventions check` reports a repository that depends on `vitest` without it) |
 | `mise.toml` | Node.js and Terraform versions (pnpm is pinned by `packageManager` in `package.json`) |
 | `.github/workflows/ci.yaml` | Calls toolkit's reusable CI (typecheck, test, prose lint, PR title, secret scan) on pull requests to `main` only (no run on pushes to `main`, to save Actions minutes on private repositories). The PR title becomes the squash commit message |
 | `.github/workflows/pr-title.yaml` | Calls toolkit's reusable workflow that re-checks only the PR title when it is edited, without installing dependencies |
