@@ -15,8 +15,8 @@ importers:
         specifier: ^0.2.0
         version: 0.2.0
       '@ryusenkei/scripts':
-        specifier: ^0.4.1
-        version: 0.4.1
+        specifier: ^0.5.1
+        version: 0.5.1
       '@types/node':
         specifier: ^26.6.1
         version: 26.6.4
@@ -180,8 +180,8 @@ packages:
     engines: {node: '>=24'}
     hasBin: true
 
-  '@ryusenkei/scripts@0.4.1':
-    resolution: {integrity: sha512-RWsrMm7Jhu6dwCRUem8rxRhWM+Ovmp0tqcd7KC4P0KmiWPt/8jSMT6kgBLyclSpUditwQKzLY95zpcxoHedbfw==}
+  '@ryusenkei/scripts@0.5.1':
+    resolution: {integrity: sha512-yMjnvd2Ir8Dy8aFhEgffdadugx3JAMVuKUiTRr6ZUVEzrUu/mql1JLVmj8Lb0HrTFQFCyH8aqGnyRjfUyKIeQQ==}
     engines: {node: '>=24'}
     hasBin: true
 
@@ -595,7 +595,7 @@ snapshots:
 
   '@ryusenkei/prose-lint@0.2.0': {}
 
-  '@ryusenkei/scripts@0.4.1':
+  '@ryusenkei/scripts@0.5.1':
     dependencies:
       '@ryusenkei/core': 0.5.0
       cross-spawn: 7.0.6

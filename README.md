@@ -21,13 +21,15 @@ npx ryusenkei-conventions sync # write the shared files from @ryusenkei/conventi
 pnpm lint:prose --fix          # fix spacing and trailing-comment alignment in code comments
 pnpm test                      # tests
 node scripts/env.ts run <cmd>  # run a command with .env loaded
-pnpm env:push [--dry-run]      # push .env values to GitHub Variables / Secrets
+pnpm env:push [--dry-run] [--only <prefix or NAME>]  # push .env values to GitHub Variables / Secrets
+pnpm env:check                 # compare .env with production, without printing values
 pnpm repo:settings             # apply GitHub repository settings (ryusenkei-repo-settings)
 ```
 
 - Style rules and settings: [`@ryusenkei/prose-lint`](https://www.npmjs.com/package/@ryusenkei/prose-lint). Add `prose-lint.json` to the root only to change the defaults.
 - Commit messages are checked by `.githooks/commit-msg`, and `.githooks/pre-push` runs the `check` script if one is defined. Both are enabled by `prepare` on `pnpm install`.
 - `env:push` targets are defined in `targets` in `scripts/env.ts`. The CLI itself is `envCli` from [`@ryusenkei/scripts`](https://www.npmjs.com/package/@ryusenkei/scripts).
+- In a git worktree without its own `.env`, the CLI reads the main checkout's `.env`. Run `env:check` before `env:push` when sending secrets.
 
 ## Tooling
 
