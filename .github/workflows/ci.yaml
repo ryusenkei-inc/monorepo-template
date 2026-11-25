@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [main]
     # タイトルの変更（edited）は pr-title.yaml
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
 
 # 同じ PR の新しい実行が来たら古い実行を中止
 concurrency:
